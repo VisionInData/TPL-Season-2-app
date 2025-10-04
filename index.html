@@ -3,20 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THORE Premier League</title>
+    <title>THORE Premier League - TPL</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#d97706">
-    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
+
     <script type="text/babel">
-        import React, { useState, useEffect } from 'react';
-        import { Trophy, Users, TrendingUp, Award, ChevronRight, Home, BarChart3, X, ArrowUp, ArrowDown, Minus, RefreshCw, AlertCircle } from 'lucide-react';
+        const { useState, useEffect } = React;
+
+        // Lucide React icons as inline SVG components
+        const Trophy = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                <path d="M4 22h16"></path>
+                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+        );
+
+        const Users = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+        );
+
+        const TrendingUp = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
+        );
+
+        const Award = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+        );
+
+        const ChevronRight = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        );
+
+        const Home = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        );
+
+        const BarChart3 = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 3v18h18"></path>
+                <path d="M18 17V9"></path>
+                <path d="M13 17V5"></path>
+                <path d="M8 17v-3"></path>
+            </svg>
+        );
+
+        const X = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
+
+        const ArrowUp = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+        );
+
+        const ArrowDown = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+        );
+
+        const Minus = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        );
+
+        const RefreshCw = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 2v6h-6"></path>
+                <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                <path d="M3 22v-6h6"></path>
+                <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+            </svg>
+        );
+
+        const AlertCircle = (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        );
 
         const TPLApp = () => {
           const [showSplash, setShowSplash] = useState(true);
@@ -26,7 +133,6 @@
           const [loading, setLoading] = useState(true);
           const [error, setError] = useState(null);
 
-          // Data states
           const [playerLeaderboard, setPlayerLeaderboard] = useState([]);
           const [teamLeaderboard, setTeamLeaderboard] = useState([]);
           const [feedPosts, setFeedPosts] = useState([]);
@@ -187,21 +293,32 @@
           if (showSplash) {
             return (
               <div className="fixed inset-0 bg-gradient-to-br from-amber-900 via-amber-800 to-amber-950 flex items-center justify-center">
-                <div className="text-center animate-pulse">
-                  <div className="mb-8">
-                    <Trophy className="w-32 h-32 text-amber-300 mx-auto mb-4" />
-                    <div className="text-6xl font-bold text-amber-300 mb-2">TPL</div>
-                    <div className="text-2xl text-amber-100 font-light">THORE Premier League</div>
+                <div className="text-center">
+                  <div className="mb-8 animate-pulse">
+                    <div className="w-80 h-80 mx-auto mb-6 bg-white rounded-3xl p-4 shadow-2xl">
+                      <img
+                        src="https://i.postimg.cc/s2SwC7QK/TPL-LOGO-UPDATED-NEW.png"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="text-6xl font-bold text-amber-300 mb-2">THORE Premier League</div>
+                    <div className="text-2xl text-amber-100 font-light">Season 2</div>
                   </div>
-                  <div className="mt-12 text-amber-200 text-sm px-8 max-w-md mx-auto">
-                    NarenP Software Development and Data Science Solutions Pvt Ltd
-                  </div>
+                  <div className="mt-20 text-amber-200 text-xl px-8 max-w-md mx-auto text-center drop-shadow-lg">
+                  Engineered for excellence by
+                  <span className="text-amber-400 font-bold text-2xl drop-shadow-[0_0_10px_rgba(255,200,0,0.9)]">
+                    {" "}NarenP
+                  </span>
+                  <br />
+                  <span className="text-amber-300">
+                    Software Development and Data Science Solutions
+                  </span>
+                </div>
                 </div>
               </div>
             );
           }
 
-          // Player Detail Modal
           if (selectedPlayer) {
             return (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -266,7 +383,6 @@
             );
           }
 
-          // Team Detail Modal
           if (selectedTeam) {
             const teamMembers = getTeamMembers(selectedTeam.team);
 
@@ -378,8 +494,12 @@
                     >
                       <RefreshCw className={`w-5 h-5 text-amber-600 ${loading ? 'animate-spin' : ''}`} />
                     </button>
-                    <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-700 rounded-2xl flex items-center justify-center shadow-lg">
-                      <span className="text-3xl">🦁</span>
+                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg p-2">
+                      <img
+                        src="https://i.postimg.cc/L6XS9b8t/TPL-logo.png"
+                        alt="TPL Logo"
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                   </div>
                 </div>
@@ -595,7 +715,7 @@
           );
         };
 
-        export default TPLApp;
+        ReactDOM.render(<TPLApp />, document.getElementById('root'));
     </script>
 </body>
 </html>
