@@ -42,8 +42,8 @@
         }
 
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
-            50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.8); }
+            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.8); }
         }
 
         .champion-glow {
@@ -359,7 +359,7 @@
                   <div className={`sticky top-0 p-4 rounded-t-3xl z-10 ${
                     selectedPlayer.ultimateWinner ? 'bg-gradient-to-r from-yellow-500 via-yellow-400 to-amber-500 animate-pulse' :
                     selectedPlayer.secondPlace ? 'bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400' :
-                    selectedPlayer.thirdPlace ? 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700' :
+                    selectedPlayer.thirdPlace ? 'bg-gradient-to-r from-orange-700 via-orange-600 to-orange-700' :
                     'bg-gradient-to-r from-amber-600 to-amber-800'
                   }`}>
                     <button
@@ -438,15 +438,15 @@
                 <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full sm:max-w-4xl h-[90vh] flex flex-col shadow-2xl">
                   <div className={`p-4 rounded-t-3xl flex-shrink-0 relative ${
                     selectedTeam.lastSeasonWinner 
-                      ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600'
+                      ? 'bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600'
                       : 'bg-gradient-to-r from-amber-600 to-amber-800'
                   }`}>
                     {selectedTeam.lastSeasonWinner && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-pulse opacity-50 rounded-t-3xl"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 animate-pulse opacity-50 rounded-t-3xl"></div>
                     )}
                     <button
                       onClick={() => setSelectedTeam(null)}
-                      className="absolute top-3 right-3 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all z-10"
+                      className="absolute top-3 right-3 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all z-20"
                     >
                       <X className="w-5 h-5 text-white" />
                     </button>
@@ -568,7 +568,7 @@
                 </div>
               </header>
 
-              <main className="max-w-7xl mx-auto px-3 py-4 pb-20">
+              <main className="max-w-7xl mx-auto px-3 py-4 pb-24">
                 {error && (
                   <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-3 flex items-center space-x-2">
                     <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -646,7 +646,7 @@
                                 } ${
                                   player.ultimateWinner ? 'bg-gradient-to-r from-yellow-100 via-yellow-50 to-amber-100 border-l-4 border-yellow-500' :
                                   player.secondPlace ? 'bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100 border-l-4 border-slate-400' :
-                                  player.thirdPlace ? 'bg-gradient-to-r from-amber-100 via-amber-50 to-amber-100 border-l-4 border-amber-700' :
+                                  player.thirdPlace ? 'bg-gradient-to-r from-orange-100 via-orange-50 to-orange-100 border-l-4 border-orange-700' :
                                   player.rank <= 3 ? 'bg-gradient-to-r from-amber-50 to-white' : ''
                                 }`}
                               >
@@ -658,7 +658,7 @@
                                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-base flex-shrink-0 ${
                                   player.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
                                   player.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg' :
-                                  player.rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-lg' :
+                                  player.rank === 3 ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg' :
                                   'bg-slate-100 text-slate-600'
                                 }`}>
                                   {getRankBadge(player.rank)}
@@ -703,17 +703,17 @@
                               key={team.rank}
                               onClick={() => setSelectedTeam(team)}
                               className={`bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer relative ${
-                                team.lastSeasonWinner ? 'border-4 border-purple-400 bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 champion-glow' :
+                                team.lastSeasonWinner ? 'border-4 border-yellow-400 bg-gradient-to-r from-yellow-50 via-amber-50 to-yellow-50 champion-glow' :
                                 team.rank <= 3 ? 'border-2 border-amber-200' : ''
                               }`}
                             >
                               {team.lastSeasonWinner && (
                                 <>
-                                  <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse flex items-center space-x-1">
+                                  <div className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse flex items-center space-x-1">
                                     <span>👑</span>
                                     <span>S1 CHAMPS</span>
                                   </div>
-                                  <div className="absolute inset-0 bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 opacity-20 rounded-xl animate-pulse"></div>
+                                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-200 via-amber-200 to-yellow-200 opacity-20 rounded-xl animate-pulse"></div>
                                 </>
                               )}
                               <div className="flex items-center space-x-3 relative z-10">
@@ -762,7 +762,7 @@
                 )}
               </main>
 
-              <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg safe-area-bottom">
+              <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg safe-area-bottom z-50">
                 <div className="max-w-7xl mx-auto px-2 py-2 flex justify-around">
                   <button
                     onClick={() => setActiveTab('feed')}
