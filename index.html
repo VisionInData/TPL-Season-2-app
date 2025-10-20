@@ -684,11 +684,12 @@
                                     </div>
                                     <p className="text-xs text-slate-500 truncate">{player.team}</p>
                                   </div>
-                                <div className="text-right flex-shrink-0">
-                                  <div className="font-bold text-base text-amber-700">{player.score}</div>
-                                  <p className="text-xs text-slate-500">points</p>
+                                  <div className="text-right flex-shrink-0">
+                                    <div className="font-bold text-base text-amber-700">{player.score}</div>
+                                    <p className="text-xs text-slate-500">points</p>
+                                  </div>
+                                  <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
                               </div>
                             ))}
                           </div>
@@ -726,7 +727,7 @@
                                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-200 via-amber-200 to-yellow-200 opacity-20 rounded-xl animate-pulse"></div>
                                 </>
                               )}
-                                <div className="flex items-center space-x-3 relative z-10">
+                              <div className="flex items-center space-x-3 relative z-10">
                                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 ${
                                   team.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
                                   team.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg' :
@@ -828,6 +829,3 @@
     </script>
 </body>
 </html>
-
-
-
