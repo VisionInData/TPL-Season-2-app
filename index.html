@@ -22,7 +22,6 @@
             box-sizing: border-box;
         }
 
-        /* Prevent text selection on mobile */
         .no-select {
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -30,18 +29,25 @@
             user-select: none;
         }
 
-        /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Hide scrollbar for team member list */
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
         .hide-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.8); }
+        }
+
+        .champion-glow {
+            animation: glow 2s ease-in-out infinite;
         }
     </style>
 </head>
@@ -221,7 +227,10 @@
                 totalF2F: parseInt(row[6]) || 0,
                 totalToken: parseInt(row[7]) || 0,
                 totalBooking: parseInt(row[8]) || 0,
-                teamLogo: row[9] || ''
+                teamLogo: row[9] || '',
+                ultimateWinner: row[10]?.toUpperCase() === 'YES',
+                secondPlace: row[11]?.toUpperCase() === 'YES',
+                thirdPlace: row[12]?.toUpperCase() === 'YES'
               }));
 
               setPlayerLeaderboard(players.sort((a, b) => a.rank - b.rank));
@@ -248,7 +257,8 @@
                 totalScore: parseInt(row[1]) || 0,
                 prevRank: parseInt(row[3]) || (index + 1),
                 rankChange: (parseInt(row[3]) || (index + 1)) - (parseInt(row[2]) || (index + 1)),
-                teamLogo: row[5] || ''
+                teamLogo: row[5] || '',
+                lastSeasonWinner: row[6]?.toUpperCase() === 'YES'
               }));
 
               setTeamLeaderboard(teams.sort((a, b) => a.rank - b.rank));
@@ -323,11 +333,11 @@
                 <div className="text-center max-w-sm w-full">
                   <div className="mb-6 animate-pulse">
                     <div className="w-40 h-40 sm:w-32 sm:h-32 mx-auto mb-4 bg-white rounded-2xl p-3 shadow-2xl">
-                      {/* <img
+                      <img
                         src="https://i.postimg.cc/L6XS9b8t/TPL-logo.png"
                         alt="TPL Logo"
                         className="w-full h-full object-contain"
-                      /> */}
+                      />
                     </div>
                     <div className="text-4xl sm:text-5xl font-bold text-amber-300 mb-2">TPL</div>
                     <div className="text-lg sm:text-xl text-amber-100 font-light">THORE Premier League</div>
@@ -346,7 +356,12 @@
             return (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
                 <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-                  <div className="sticky top-0 bg-gradient-to-r from-amber-600 to-amber-800 p-4 rounded-t-3xl z-10">
+                  <div className={`sticky top-0 p-4 rounded-t-3xl z-10 ${
+                    selectedPlayer.ultimateWinner ? 'bg-gradient-to-r from-yellow-500 via-yellow-400 to-amber-500 animate-pulse' :
+                    selectedPlayer.secondPlace ? 'bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400' :
+                    selectedPlayer.thirdPlace ? 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700' :
+                    'bg-gradient-to-r from-amber-600 to-amber-800'
+                  }`}>
                     <button
                       onClick={() => setSelectedPlayer(null)}
                       className="absolute top-3 right-3 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all"
@@ -360,8 +375,20 @@
                         </span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h2 className="text-xl font-bold text-white truncate">{selectedPlayer.name}</h2>
+                        <div className="flex items-center space-x-2">
+                          <h2 className="text-xl font-bold text-white truncate">{selectedPlayer.name}</h2>
+                          {selectedPlayer.ultimateWinner && (
+                            <span className="text-xl animate-bounce">👑</span>
+                          )}
+                        </div>
                         <p className="text-amber-100 text-sm">{selectedPlayer.team}</p>
+                        {(selectedPlayer.ultimateWinner || selectedPlayer.secondPlace || selectedPlayer.thirdPlace) && (
+                          <p className="text-white text-xs font-bold mt-1 bg-white bg-opacity-20 rounded px-2 py-0.5 inline-block">
+                            {selectedPlayer.ultimateWinner ? '🏆 ULTIMATE WINNER' :
+                             selectedPlayer.secondPlace ? '🥈 2ND PLACE CHAMPION' :
+                             '🥉 3RD PLACE CHAMPION'}
+                          </p>
+                        )}
                       </div>
                       <div className="text-center flex-shrink-0">
                         <div className="text-3xl">{getRankBadge(selectedPlayer.rank)}</div>
@@ -409,14 +436,21 @@
             return (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
                 <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full sm:max-w-4xl h-[90vh] flex flex-col shadow-2xl">
-                  <div className="bg-gradient-to-r from-amber-600 to-amber-800 p-4 rounded-t-3xl flex-shrink-0">
+                  <div className={`p-4 rounded-t-3xl flex-shrink-0 relative ${
+                    selectedTeam.lastSeasonWinner 
+                      ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600'
+                      : 'bg-gradient-to-r from-amber-600 to-amber-800'
+                  }`}>
+                    {selectedTeam.lastSeasonWinner && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-pulse opacity-50 rounded-t-3xl"></div>
+                    )}
                     <button
                       onClick={() => setSelectedTeam(null)}
                       className="absolute top-3 right-3 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all z-10"
                     >
                       <X className="w-5 h-5 text-white" />
                     </button>
-                    <div className="flex items-center space-x-3 mb-3">
+                    <div className="flex items-center space-x-3 mb-3 relative z-10">
                       <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
                         {selectedTeam.teamLogo ? (
                           <img
@@ -433,8 +467,18 @@
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h2 className="text-xl font-bold text-white truncate">{selectedTeam.team}</h2>
+                        <div className="flex items-center space-x-2">
+                          <h2 className="text-xl font-bold text-white truncate">{selectedTeam.team}</h2>
+                          {selectedTeam.lastSeasonWinner && (
+                            <span className="text-xl animate-bounce">👑</span>
+                          )}
+                        </div>
                         <p className="text-amber-100 text-sm">{teamMembers.length} Members</p>
+                        {selectedTeam.lastSeasonWinner && (
+                          <p className="text-white text-xs font-bold mt-1 bg-white bg-opacity-20 rounded px-2 py-0.5 inline-block">
+                            🏆 LAST SEASON CHAMPIONS
+                          </p>
+                        )}
                       </div>
                       <div className="text-center flex-shrink-0">
                         <div className="text-3xl mb-1">{getRankBadge(selectedTeam.rank)}</div>
@@ -446,7 +490,7 @@
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white bg-opacity-20 rounded-xl p-3 text-center">
+                    <div className="bg-white bg-opacity-20 rounded-xl p-3 text-center relative z-10">
                       <p className="text-amber-100 text-xs mb-1">Total Team Score</p>
                       <p className="text-3xl font-bold text-white">{selectedTeam.totalScore}</p>
                     </div>
@@ -597,10 +641,20 @@
                               <div
                                 key={player.rank}
                                 onClick={() => setSelectedPlayer(player)}
-                                className={`p-3 flex items-center space-x-3 hover:bg-amber-50 transition-colors cursor-pointer ${
+                                className={`p-3 flex items-center space-x-3 hover:bg-amber-50 transition-colors cursor-pointer relative ${
                                   idx !== playerLeaderboard.length - 1 ? 'border-b border-slate-100' : ''
-                                } ${player.rank <= 3 ? 'bg-gradient-to-r from-amber-50 to-white' : ''}`}
+                                } ${
+                                  player.ultimateWinner ? 'bg-gradient-to-r from-yellow-100 via-yellow-50 to-amber-100 border-l-4 border-yellow-500' :
+                                  player.secondPlace ? 'bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100 border-l-4 border-slate-400' :
+                                  player.thirdPlace ? 'bg-gradient-to-r from-amber-100 via-amber-50 to-amber-100 border-l-4 border-amber-700' :
+                                  player.rank <= 3 ? 'bg-gradient-to-r from-amber-50 to-white' : ''
+                                }`}
                               >
+                                {player.ultimateWinner && (
+                                  <div className="absolute top-1 right-1">
+                                    <span className="text-xs animate-bounce">👑</span>
+                                  </div>
+                                )}
                                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-base flex-shrink-0 ${
                                   player.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
                                   player.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg' :
@@ -610,7 +664,14 @@
                                   {getRankBadge(player.rank)}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-bold text-slate-800 text-sm truncate">{player.name}</h3>
+                                  <div className="flex items-center space-x-1">
+                                    <h3 className="font-bold text-slate-800 text-sm truncate">{player.name}</h3>
+                                    {(player.ultimateWinner || player.secondPlace || player.thirdPlace) && (
+                                      <span className="text-xs">
+                                        {player.ultimateWinner ? '🏆' : player.secondPlace ? '🥈' : '🥉'}
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-xs text-slate-500 truncate">{player.team}</p>
                                 </div>
                                 <div className="text-right flex-shrink-0">
@@ -641,11 +702,21 @@
                             <div
                               key={team.rank}
                               onClick={() => setSelectedTeam(team)}
-                              className={`bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer ${
+                              className={`bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer relative ${
+                                team.lastSeasonWinner ? 'border-4 border-purple-400 bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 champion-glow' :
                                 team.rank <= 3 ? 'border-2 border-amber-200' : ''
                               }`}
                             >
-                              <div className="flex items-center space-x-3">
+                              {team.lastSeasonWinner && (
+                                <>
+                                  <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse flex items-center space-x-1">
+                                    <span>👑</span>
+                                    <span>S1 CHAMPS</span>
+                                  </div>
+                                  <div className="absolute inset-0 bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 opacity-20 rounded-xl animate-pulse"></div>
+                                </>
+                              )}
+                              <div className="flex items-center space-x-3 relative z-10">
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 ${
                                   team.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
                                   team.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg' :
@@ -654,7 +725,7 @@
                                 }`}>
                                   {getRankBadge(team.rank)}
                                 </div>
-                                <div className="w-10 h-10 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+                                <div className="w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow-md">
                                   {team.teamLogo ? (
                                     <img
                                       src={team.teamLogo}
@@ -734,9 +805,6 @@
                   <p className="text-xs mb-1">
                     Engineered for excellence by <span className="font-bold text-amber-400">NarenP</span>
                   </p>
-                  {/* <p className="text-xs text-slate-400">
-                    Software Development and Data Science Solutions
-                  </p> */}
                   <p className="text-xs text-slate-500 mt-1">
                     Copyright © {new Date().getFullYear()} All rights reserved.
                   </p>
@@ -750,8 +818,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
