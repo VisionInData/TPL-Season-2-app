@@ -42,8 +42,8 @@
         }
 
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
-            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.8); }
+          0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+          50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
         }
 
         .champion-glow {
@@ -160,10 +160,29 @@
 
         const TPLApp = () => {
             // 🔒 PUBLIC MODE CONFIG
-            const PUBLIC_LEADERBOARD_ENABLED = false; 
+            const isPublicScoreboardOpen = () => {
+              const now = new Date();
+            
+              const day = now.getDate();            // 10, 20, 30
+              const hour = now.getHours();          // 24-hour format
+            
+              const validDay = day % 10 === 0;       // 10, 20, 30
+              const validTime = hour >= 16 && hour < 19; // 4 PM to 7 PM
+            
+              return validDay && validTime;
+            };
+            useEffect(() => {
+              const timer = setInterval(() => {
+                window.location.reload();
+              }, 60 * 1000);
+            
+              return () => clearInterval(timer);
+            }, []);
+                        
+            const PUBLIC_LEADERBOARD_ENABLED = isPublicScoreboardOpen();
+ 
             // true  → leaderboard visible to public
             // false → leaderboard hidden (Wall of Fame only)
-            const [showSeason3, setShowSeason3] = useState(true);
           const [showSplash, setShowSplash] = useState(true);
           const [activeTab, setActiveTab] = useState('feed');
           const [selectedPlayer, setSelectedPlayer] = useState(null);
@@ -175,7 +194,7 @@
           const [teamLeaderboard, setTeamLeaderboard] = useState([]);
           const [feedPosts, setFeedPosts] = useState([]);
 
-          const SHEET_ID = '1saAKGOHlLaoEhfnocqJx8kjEmO8t9Qo-oyl_FmOYmOQ';
+          const SHEET_ID = '1vLsI-jXCvLOd2YPZJ7pLsI3VuLd9zX1Y5gY9gOri968';
           const SHEET_NAMES = {
             players: 'Individual Leaderboard',
             teams: 'Team Leaderboard',
@@ -195,25 +214,6 @@
               return () => clearTimeout(splashTimer);
             }, []);
             
-            useEffect(() => {
-              if (!showSplash && showSeason3) {
-                const seasonTimer = setTimeout(() => {
-                  setShowSeason3(false);
-                }, 10000); // duration of Season 3 screen
-            
-                return () => clearTimeout(seasonTimer);
-              }
-            }, [showSplash, showSeason3]);
-
-            useEffect(() => {
-              if (!showSplash && showSeason3) {
-                const audio = new Audio(
-                  "/assests/mixkit-tape-rewind-cinematic-transition-1088.mp3"
-                );
-                audio.volume = 0.7;
-                audio.play().catch(() => {});
-              }
-            }, [showSplash, showSeason3]);
             
           useEffect(() => {
             if (!showSplash) {
@@ -375,7 +375,7 @@
                     </div>
                     <div className="text-4xl sm:text-5xl font-bold text-amber-300 mb-2">TPL</div>
                     <div className="text-lg sm:text-xl text-amber-100 font-light">THORE Premier League</div>
-                    <div className="text-sm text-amber-200 mt-2">Season 2</div>
+                    <div className="text-sm text-amber-200 mt-2">Season 3</div>
                   </div>
                   <div className="mt-8 text-amber-200 text-xs px-4">
                     Engineered for excellence by <span className="font-bold">NarenP</span><br/>
@@ -386,36 +386,6 @@
             );
           }
 
-            if (showSeason3) {
-                  return (
-                    <div className="fixed inset-0 bg-gradient-to-br from-black via-slate-900 to-black flex items-center justify-center">
-                      <div className="text-center animate-fade-in">
-                        
-                        <div className="w-52 h-52 mx-auto mb-6 bg-white rounded-3xl p-4 shadow-2xl">
-                          <img
-                            src="https://i.postimg.cc/fbRcn9YW/Generated-Image-December-19-2025-7-56PM-removebg-preview.png"
-                            alt="TPL Season 3"
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                
-                        <h1 className="text-3xl font-extrabold text-amber-400 tracking-wide mb-2">
-                          TPL SEASON 3
-                        </h1>
-                
-                        <p className="text-lg text-slate-200 font-medium">
-                          See you soon.
-                        </p>
-                        <p className="text-lg text-slate-200 font-medium">
-                          We are coming back.
-                        </p>
-                          
-                      </div>
-                    </div>
-                  );
-                }
-
-
           if (selectedPlayer) {
             return (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
@@ -424,7 +394,7 @@
                     selectedPlayer.ultimateWinner ? 'bg-gradient-to-r from-yellow-500 via-yellow-400 to-amber-500 animate-pulse' :
                     selectedPlayer.secondPlace ? 'bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400' :
                     selectedPlayer.thirdPlace ? 'bg-gradient-to-r from-orange-700 via-orange-600 to-orange-700' :
-                    'bg-gradient-to-r from-amber-600 to-amber-800'
+                    'bg-gradient-to-r from-emerald-600 to-green-700'
                   }`}>
                     <button
                       onClick={() => setSelectedPlayer(null)}
@@ -434,7 +404,7 @@
                     </button>
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                        <span className="text-xl font-bold text-amber-700">
+                        <span className="text-xl font-bold text-emerald-700">
                           {selectedPlayer.name.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
@@ -503,7 +473,7 @@
                   <div className={`p-4 rounded-t-3xl flex-shrink-0 relative ${
                     selectedTeam.lastSeasonWinner 
                       ? 'bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600'
-                      : 'bg-gradient-to-r from-amber-600 to-amber-800'
+                      : 'bg-gradient-to-r from-emerald-600 to-green-700'
                   }`}>
                     {selectedTeam.lastSeasonWinner && (
                       <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 animate-pulse opacity-50 rounded-t-3xl"></div>
@@ -587,7 +557,7 @@
                               </div>
                             </div>
                             <div className="text-right flex-shrink-0">
-                              <div className="text-lg font-bold text-amber-700">{member.score}</div>
+                              <div className="text-lg font-bold text-emerald-700">{member.score}</div>
                               <p className="text-xs text-slate-500">points</p>
                             </div>
                           </div>
@@ -601,11 +571,11 @@
           }
 
           return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50">
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-green-50">
               <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-amber-100">
                 <div className="max-w-7xl mx-auto px-3 py-3 flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg flex items-center justify-center shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-green-700 rounded-lg flex items-center justify-center shadow-lg">
                       <Trophy className="w-5 h-5 text-amber-100" />
                     </div>
                     <div>
@@ -615,11 +585,14 @@
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={fetchAllData}
+                      onClick={() => {
+                          setActiveTab('feed');
+                          fetchAllData();
+                        }}
                       disabled={loading}
                       className="p-2 hover:bg-amber-50 rounded-lg transition-colors"
                     >
-                      <RefreshCw className={`w-4 h-4 text-amber-600 ${loading ? 'animate-spin' : ''}`} />
+                      <RefreshCw className={`w-4 h-4 text-green-600 ${loading ? 'animate-spin' : ''}`} />
                     </button>
                     <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg p-1.5">
                       <img
@@ -642,7 +615,7 @@
 
                 {loading && !error ? (
                   <div className="flex flex-col items-center justify-center py-20">
-                    <RefreshCw className="w-10 h-10 text-amber-600 animate-spin mb-3" />
+                    <RefreshCw className="w-10 h-10 text-green-600 animate-spin mb-3" />
                     <p className="text-slate-600 text-sm">Loading data...</p>
                   </div>
                 ) : (
@@ -651,7 +624,7 @@
                       <div className="space-y-4">
                         <div className="flex items-center justify-between mb-4">
                           <h2 className="text-xl font-bold text-slate-800">Wall of Fame</h2>
-                          <Award className="w-5 h-5 text-amber-600" />
+                          <Award className="w-5 h-5 text-green-600" />
                         </div>
                         {feedPosts.length === 0 ? (
                           <div className="text-center py-12 text-slate-500">
@@ -676,7 +649,7 @@
                               <div className="p-3">
                                 <p className="text-slate-700 text-sm whitespace-pre-line">{post.details}</p>
                                 <div className="flex items-center justify-between text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
-                                  <button className="flex items-center space-x-2 hover:text-amber-600 transition-colors">
+                                  <button className="flex items-center space-x-2 hover:text-green-600 transition-colors">
                                     <span className="text-base">👏</span>
                                     <span>{post.likes} applause</span>
                                   </button>
@@ -692,7 +665,7 @@
                       <div className="space-y-3">
                         <div className="flex items-center justify-between mb-4">
                           <h2 className="text-xl font-bold text-slate-800">Player Leaderboard</h2>
-                          <TrendingUp className="w-5 h-5 text-amber-600" />
+                          <TrendingUp className="w-5 h-5 text-green-600" />
                         </div>
                         {playerLeaderboard.length === 0 ? (
                           <div className="text-center py-12 text-slate-500">
@@ -749,7 +722,7 @@
                                     <p className="text-xs text-slate-500 truncate">{player.team}</p>
                                   </div>
                                   <div className="text-right flex-shrink-0">
-                                    <div className="font-bold text-base text-amber-700">{player.score}</div>
+                                    <div className="font-bold text-base text-emerald-700">{player.score}</div>
                                     <p className="text-xs text-slate-500">points</p>
                                   </div>
                                   <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
@@ -765,7 +738,7 @@
                       <div className="space-y-3">
                         <div className="flex items-center justify-between mb-4">
                           <h2 className="text-xl font-bold text-slate-800">Team Leaderboard</h2>
-                          <Users className="w-5 h-5 text-amber-600" />
+                          <Users className="w-5 h-5 text-green-600" />
                         </div>
                         {teamLeaderboard.length === 0 ? (
                           <div className="text-center py-12 text-slate-500">
@@ -786,7 +759,7 @@
                                 <>
                                   <div className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse flex items-center space-x-1">
                                     <span>👑</span>
-                                    <span>S1 CHAMPS</span>
+                                    <span>S2 CHAMPS</span>
                                   </div>
                                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-200 via-amber-200 to-yellow-200 opacity-20 rounded-xl animate-pulse"></div>
                                 </>
@@ -795,7 +768,7 @@
                                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 ${
                                   team.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
                                   team.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg' :
-                                  team.rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-lg' :
+                                  team.rank === 3 ? 'bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-lg' :
                                   'bg-slate-100 text-slate-600'
                                 }`}>
                                   {getRankBadge(team.rank)}
@@ -820,7 +793,7 @@
                                   <p className="text-xs text-slate-500">{getTeamMembers(team.team).length} members</p>
                                 </div>
                                 <div className="text-right flex-shrink-0">
-                                  <div className="text-xl font-bold text-amber-700">{team.totalScore}</div>
+                                  <div className="text-xl font-bold text-emerald-700">{team.totalScore}</div>
                                   <div className="flex items-center justify-end space-x-1 mt-0.5">
                                     {getRankChangeIcon(team.rankChange)}
                                     <span className="text-xs text-slate-500">vs last</span>
@@ -843,35 +816,41 @@
                     onClick={() => setActiveTab('feed')}
                     className={`flex flex-col items-center space-y-1 px-4 py-1.5 rounded-lg transition-all ${
                       activeTab === 'feed'
-                        ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800'
-                        : 'text-slate-500 hover:text-amber-600'
+                        ? 'bg-gradient-to-br from-green-100 to-emerald-200 text-green-800'
+                        : 'text-slate-500 hover:text-green-600'
                     }`}
                   >
                     <Home className="w-5 h-5" />
                     <span className="text-xs font-medium">Feed</span>
                   </button>
-                  {/* <button
-                    onClick={() => setActiveTab('players')}
-                    className={`flex flex-col items-center space-y-1 px-4 py-1.5 rounded-lg transition-all ${
-                      activeTab === 'players'
-                        ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800'
-                        : 'text-slate-500 hover:text-amber-600'
-                    }`}
-                  >
-                    <TrendingUp className="w-5 h-5" />
-                    <span className="text-xs font-medium">Players</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('teams')}
-                    className={`flex flex-col items-center space-y-1 px-4 py-1.5 rounded-lg transition-all ${
-                      activeTab === 'teams'
-                        ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800'
-                        : 'text-slate-500 hover:text-amber-600'
-                    }`}
-                  >
-                    <BarChart3 className="w-5 h-5" />
-                    <span className="text-xs font-medium">Teams</span>
-                  </button> */}
+                  {PUBLIC_LEADERBOARD_ENABLED && (
+                      <>
+                        <button
+                          onClick={() => setActiveTab('players')}
+                          className={`flex flex-col items-center space-y-1 px-4 py-1.5 rounded-lg transition-all ${
+                            activeTab === 'players'
+                              ? 'bg-gradient-to-br from-green-100 to-emerald-200 text-green-800'
+                              : 'text-slate-500 hover:text-green-600'
+                          }`}
+                        >
+                          <TrendingUp className="w-5 h-5" />
+                          <span className="text-xs font-medium">Players</span>
+                        </button>
+                    
+                        <button
+                          onClick={() => setActiveTab('teams')}
+                          className={`flex flex-col items-center space-y-1 px-4 py-1.5 rounded-lg transition-all ${
+                            activeTab === 'teams'
+                              ? 'bg-gradient-to-br from-green-100 to-emerald-200 text-green-800'
+                              : 'text-slate-500 hover:text-green-600'
+                          }`}
+                        >
+                          <BarChart3 className="w-5 h-5" />
+                          <span className="text-xs font-medium">Teams</span>
+                        </button>
+                      </>
+                    )}
+
                 </div>
               </nav>
 
@@ -893,7 +872,3 @@
     </script>
 </body>
 </html>
-
-
-
-
