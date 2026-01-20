@@ -167,7 +167,7 @@
               const hour = now.getHours();          // 24-hour format
             
               const validDay = day % 10 === 0;       // 10, 20, 30
-              const validTime = hour >= 16 && hour < 19; // 4 PM to 7 PM
+              const validTime = hour >= 10 && hour < 19; // 4 PM to 7 PM
             
               return validDay && validTime;
             };
@@ -872,3 +872,4 @@
     </script>
 </body>
 </html>
+
