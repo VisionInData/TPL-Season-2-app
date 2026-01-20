@@ -167,20 +167,27 @@
               const hour = now.getHours();          // 24-hour format
             
               const validDay = day % 10 === 0;       // 10, 20, 30
-              const validTime = hour >= 10 && hour < 19; // 4 PM to 7 PM
+              const validTime = hour >= 16 && hour < 19; // 4 PM to 7 PM
             
               return validDay && validTime;
             };
             useEffect(() => {
-              const timer = setInterval(() => {
-                window.location.reload();
-              }, 60 * 1000);
-            
+              const timer = setInterval(fetchAllData, 5 * 60 * 1000);
               return () => clearInterval(timer);
+            }, []);
+            
+            useEffect(() => {
+              const handleVisibilityChange = () => {
+                if (document.visibilityState === 'visible') {
+                  fetchAllData();
+                }
+              };
+            
+              document.addEventListener('visibilitychange', handleVisibilityChange);
+              return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
             }, []);
                         
             const PUBLIC_LEADERBOARD_ENABLED = isPublicScoreboardOpen();
- 
             // true  → leaderboard visible to public
             // false → leaderboard hidden (Wall of Fame only)
           const [showSplash, setShowSplash] = useState(true);
@@ -200,11 +207,6 @@
             teams: 'Team Leaderboard',
             feed: 'Wall of Fame'
           };
-
-          //useEffect(() => {
-          //  const timer = setTimeout(() => setShowSplash(false), 3000);
-          //  return () => clearTimeout(timer);
-          //}, []);
 
             useEffect(() => {
               const splashTimer = setTimeout(() => {
@@ -457,11 +459,11 @@
                         <p className="text-2xl font-bold text-blue-600">{selectedPlayer.totalSV}</p>
                       </div>
                       <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-3 text-center">
-                        <p className="text-slate-600 text-xs font-medium mb-1">Video Calls</p>
+                        <p className="text-slate-600 text-xs font-medium mb-1">VCs</p>
                         <p className="text-2xl font-bold text-purple-600">{selectedPlayer.totalVC}</p>
                       </div>
                       <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-3 text-center">
-                        <p className="text-slate-600 text-xs font-medium mb-1">Face to Face</p>
+                        <p className="text-slate-600 text-xs font-medium mb-1">F2Fs</p>
                         <p className="text-2xl font-bold text-green-600">{selectedPlayer.totalF2F}</p>
                       </div>
                       <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-3 text-center">
@@ -469,7 +471,7 @@
                         <p className="text-2xl font-bold text-orange-600">{selectedPlayer.totalToken}</p>
                       </div>
                       <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-3 text-center col-span-2">
-                        <p className="text-slate-600 text-xs font-medium mb-1">Total Bookings</p>
+                        <p className="text-slate-600 text-xs font-medium mb-1">Bookings</p>
                         <p className="text-2xl font-bold text-pink-600">{selectedPlayer.totalBooking}</p>
                       </div>
                     </div>
@@ -887,5 +889,6 @@
     </script>
 </body>
 </html>
+
 
 
