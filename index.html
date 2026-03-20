@@ -168,17 +168,8 @@
               const year = now.getFullYear();
               const hour = now.getHours();          // 24-hour format
             
-              // Exception for January 29, 2026 from 6 PM to 10 PM
-              const isException =
-                    year === 2026 &&
-                    month === 1 && // Feb
-                    (
-                      (day === 19 && hour >= 18 && hour < 22) ||
-                      (day === 28 && hour >= 18 && hour < 22)
-                    );
-            
               // Regular schedule: 10th, 20th, 30th of each month from 7 PM to 10 PM
-              const validDay = day % 10 === 0;       // 10, 20, 30
+              const validDay = day === 10;       // 10
               const validTime = hour >= 19 && hour < 22; // 7 PM to 10 PM
             
               return isException || (validDay && validTime);
